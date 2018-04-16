@@ -54,16 +54,19 @@ class TheRepl
 
   def set_variables(activity, line_num, file_read)
     val = activity[0].upcase.ord
-    return false unless check_variables([activity[0]])
+    return could_not_eval(line_num) unless check_variables([activity[0]])
     if activity[1].nil?
       puts "Line #{line_num}: operator LET applied to empty stack"
       error_eval(2, line_num, nil, file_read)
-	  return false
     else
       activity.shift
       store = evaluate_expression(activity, line_num, file_read)
       $user_variables[val - 65] = store unless store.nil?
     end
+  end
+  
+  def could_not_eval(line_num)
+    puts "Line #{line_num}: Couldn't evaluate expression"
   end
 
   def print_expression(activity, line_num, file_read)
@@ -82,7 +85,7 @@ class TheRepl
     when 3
       puts "Line #{line}: #{extra} elements in stack after evaluation"
     end
-    exit code.to_s if file_read
+    exit code if file_read
     nil
   end
 
@@ -263,16 +266,9 @@ class TheRepl
   def doing_let(activity, line_num, file_read)
     activity.shift
     set_val = set_variables(activity, line_num, file_read)
-	unless set_val.nil? || file_read || !set_val
-		puts set_val
-	else
-		could_not_eval(line_num) if set_val
-	end
+	puts set_val unless set_val.nil? || file_read || !set_val
   end
 
-  def could_not_eval(line_num)
-    puts "Line #{line_num}: Couldn't evaluate expression"
-  end
 
   def run_eval(file_line, line_num, file_read)
     activity = check_run_type(file_line)
