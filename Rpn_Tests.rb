@@ -8,27 +8,32 @@ require_relative 'the_repl'
 class Rpn_Tests < Minitest::Test
 	
 	
-	
+	# checks if the method quit_check returns properly with the a token array of 'QUIT'
+	# will return false if there is a quit
 	def test_quit_check_true_1
 	    tester = TheRepl.new()
 		assert_equal false, tester.quit_check(['QUIT'])
 	end
 	
+	# checks if the method quit_check will properly ignore case and extra variables
 	def test_quit_check_true_2
 		tester = TheRepl.new()
 		assert_equal false, tester.quit_check(['QUIt', 'let', 'a', '9'])
 	end
 	
+	# checks if quit check will properly ignore case
 	def test_quit_check_true_3
 		tester = TheRepl.new()
 		assert_equal false, tester.quit_check(['QUit'])
 	end
 	
+	# checks if quit check will return false if garbage happens after the quit 
 	def test_quit_check_true_4
 		tester = TheRepl.new()
 		assert_equal false, tester.quit_check(['quit', 'cheese'])
 	end
 	
+	# checks if quit check will return true if not given quit
 	def test_quit_check_false_1
 		tester = TheRepl.new()
 		assert_equal true, tester.quit_check(['quot'])
