@@ -46,32 +46,32 @@ class Rpn_Tests < Minitest::Test
 	
 	def test_variable_check_true_1
 		tester = TheRepl.new()
-		assert_equal true, tester.check_for_variables(['ask', 'for', 'a', 'dog'])
+		assert_equal true, tester.check_variables(['ask', 'for', 'a', 'dog'])
 	end
 	
 	def test_variable_check_true_2
 		tester = TheRepl.new()
-		assert_equal true, tester.check_for_variables(['b', 'cause', 'turkey'])
+		assert_equal true, tester.check_variables(['b', 'cause', 'turkey'])
 	end
 	
 	def test_variable_check_false_1
 		tester = TheRepl.new()
-		assert_nil tester.check_for_variables(['as', 'yu', 're'])
+		assert_nil tester.check_variables(['as', 'yu', 're'])
 	end
 	
 	def test_variable_check_false_2
 		tester = TheRepl.new()
-		assert_nil tester.check_for_variables(['chips'])
+		assert_nil tester.check_variables(['chips'])
 	end
 	
 	def test_variable_check_corner_1
 		tester = TheRepl.new()
-		assert_nil tester.check_for_variables([1, 2, 3])
+		assert_nil tester.check_variables([1, 2, 3])
 	end
 	
 	def test_variable_check_corner_2
 		tester = TheRepl.new()
-		assert_nil tester.check_for_variables([])
+		assert_nil tester.check_variables([])
 	end
 
 	def test_get_variables_1
