@@ -192,10 +192,11 @@ class TheRepl
   # Throws error if incorrect operators are used
   # and returns false to say it already threw an error
   # Otherwise it evaluates the expression and returns the stack
+  # Also checks for /0
   def check_operators(token, evaluation, line, file_read, ops)
     op1 = ops[0]
     op2 = ops[1]
-    unless ['-', '+', '/', '*'].include?(token)
+    unless ['-', '+', '/', '*'].include?(token) && !(token == '/' && op2.to_i.zero?)
       puts "Line #{line}: Could not evaluate expression"
       error_eval(5, line, nil, file_read)
       return false
@@ -318,7 +319,7 @@ class TheRepl
   end
 
   # Upon receiving the code returned by typecheck, run_eval
-  # sends it to this method which calls the appropriate 
+  # sends it to this method which calls the appropriate
   # method to handle the users command
   # exits with specified exit code if necessary
   def handle_command(code, activity, line_num, file_read)
@@ -330,7 +331,7 @@ class TheRepl
     when 3
       doing_evaluate(activity, line_num, file_read)
     when -4..-1
-      exit -code if file_read
+      exit code.abs if file_read
     end
   end
 
