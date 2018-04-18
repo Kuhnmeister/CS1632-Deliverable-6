@@ -21,12 +21,24 @@ class TheRepl
     end
   end
 
+  # Simple handler for a file
+  def handle_file(the_file)
+    begin
+      f = File.open(the_file, 'r')
+    rescue SystemCallError
+      puts "No such file: #{the_file}"
+      return false
+    end
+    f
+  end
+
   # This is the file mode, iterates over every line of the files
   # and keeps track of the line number
   def file_run(args, line_num)
     file_read = true
     args.each do |the_file|
-      f = File.open(the_file, 'r')
+      f = handle_file(the_file)
+      exit 5 unless f
       f.each_line do |line|
         line_num += 1
         run_eval(line, line_num, file_read)
