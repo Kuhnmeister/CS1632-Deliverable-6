@@ -218,48 +218,61 @@ class Rpn_Tests < Minitest::Test
 		assert_equal false, tester.set_evaluation('n', [], 1, false)
 	end
 	
-	#
+	# Tests if once a variable is set it is properly treated as the number it 
+	# was set to
 	def test_set_evaluation_3
 		tester = TheRepl.new()
 		tester.set_variables(['a', '97'], 1, false)
 		assert_equal ["97"], tester.set_evaluation('a', [], 1, false)
 	end	
 	
+	# Tests that when there is a hanging operator that the set_evaluation properly
+	# returns false and prints out an errors message
 	def test_set_evaluation_4
 		tester = TheRepl.new()
 		assert_output("Line 6789: Operator * applied to an empty stack\n") { tester.set_evaluation('*', [], 6789, false) }
 		assert_equal false, tester.set_evaluation('*', [], 6789, false)
 	end
 	
+	# Tests a simple case of multiplying two numbers together 
+	# returns the proper result
 	def test_set_evaluation_5
 		tester = TheRepl.new()
 		assert_equal [91], tester.set_evaluation('*', ['7', '13'], 1, false)
 	end
 	
+	# Tests that a non initialized variable returns false 
+	# and outputs the correct error message
 	def test_variable_process_1
 		tester = TheRepl.new()
 		assert_output("Line 1928: Variable z has not been initialized\n") { tester.variable_process('z', [], 1928, false) }
 		assert_equal false, tester.variable_process('z', [], 1928, false)
 	end
 	
+	# Tests non initialized error message
 	def test_variable_process_2
 		tester = TheRepl.new()
 		assert_output("Line 2837: Variable ; has not been initialized\n") { tester.variable_process(';', [], 2837, false) }
 		assert_equal false, tester.variable_process(';', [], 2837, false)
 	end
 	
+	# Tests that when variable_process is called on a variable that has been set
+	# it returns that value
 	def test_variable_process_3
 		tester = TheRepl.new()
 		tester.set_variables(['a', '97'], 1, false)
 		assert_equal ["97"], tester.variable_process('a', [], 1, false)
 	end
 	
+	# Tests if there is no operators that evaluate_expression
+	# returns nil
 	def test_evaluate_expression_1
 		tester = TheRepl.new()
 		def tester.set_evaluation(token, eval, line, fread); false; end
 		assert_nil tester.evaluate_expression(['1','2','3'], 1, false)
 	end
 	
+	# Tests the proper error message is output if there are no operators
 	def test_evaluate_expression_2
 		tester = TheRepl.new()
 		def tester.set_evaluation(token, eval, line, fread); nil; end
@@ -267,17 +280,20 @@ class Rpn_Tests < Minitest::Test
 		assert_nil tester.evaluate_expression(['1'], 1, false)
 	end
 	
+	# Tests the error message when things are left on the stack
 	def test_check_eval_errors_1
 		tester = TheRepl.new()
 		assert_output("Line 4856: 4 elements in stack after evaluation\n") { tester.check_for_eval_errors(['1','2','3','4'], false, 4856) }
 		assert_nil tester.check_for_eval_errors(['1','2','3','4'], false, 4856)
 	end
 	
+	# Checks when there is only 1 number on the stack that that number is returned
 	def test_check_eval_errors_2
 		tester = TheRepl.new()
 		assert_equal '192837465', tester.check_for_eval_errors(['192837465'], false, 1)
 	end
 	
+	# checks in a simple case that run_eval returns true
 	def test_run_eval_1
 		tester = TheRepl.new()
 		def tester.check_run_type(file_line); []; end
